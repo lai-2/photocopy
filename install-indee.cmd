@@ -34,6 +34,12 @@ title indee - Cai dat tu dong
 ::      photocopy, asset "indee-<version>.zip" trong release "latest") - va
 ::      giai nen vao C:\Program Files\indee.
 ::   6. Tao shortcut "indee" ngoai Desktop.
+::
+:: Moi lan chay, toan bo output cua script (ke ca khi loi hoac thoat dot ngot)
+:: duoc tu dong ghi vao 1 file log rieng (install-log-<timestamp>.txt) ngay
+:: trong cung thu muc voi file install-indee.cmd nay, dong thoi van hien tren
+:: man hinh nhu binh thuong - de tien kiem tra sau nay, dac biet huu ich khi
+:: debug tren Windows 7.
 :: ============================================================================
 
 set "INSTALL_DIR=C:\Program Files\indee"
@@ -51,9 +57,23 @@ if %errorlevel% neq 0 (
     exit /b
 )
 
+:: ---- Buoc 0b: tu ghi log toan bo qua trinh cai dat ra file -----------------
+:: Chi wrap 1 lan (danh dau bang tham so __LOGGED__) - lan chay ke tiep (da la
+:: tien trinh Administrator) se thay danh dau nay va bo qua, chay thang phan
+:: than script ben duoi. Dung "& '%~f0'" (khong dung cmd /c "...") de tranh
+:: loi nested-quote khi duong dan script co khoang trang.
+if /I not "%~1"=="__LOGGED__" (
+    for /f "usebackq delims=" %%T in (`powershell -NoProfile -Command "Get-Date -Format 'yyyyMMdd_HHmmss'"`) do set "LOG_TS=%%T"
+    set "LOG_FILE=%~dp0install-log-!LOG_TS!.txt"
+    echo [*] Dang ghi log cai dat vao: !LOG_FILE!
+    powershell -NoProfile -Command "& { & '%~f0' __LOGGED__ 2>&1 | Tee-Object -FilePath '!LOG_FILE!'; exit $LASTEXITCODE }"
+    exit /b !errorlevel!
+)
+
 echo ================================================================
 echo   Cai dat indee - tu dong
 echo ================================================================
+if defined LOG_FILE echo   Log: %LOG_FILE%
 echo.
 
 :: ---- Buoc 1: xac dinh he dieu hanh -----------------------------------------
@@ -218,6 +238,7 @@ echo.
 echo ================================================================
 echo   Cai dat hoan tat!
 echo ================================================================
+if defined LOG_FILE echo   Log cai dat: %LOG_FILE%
 echo.
 echo [*] Dang mo indee...
 start "" "%INSTALL_DIR%\indee.exe"
