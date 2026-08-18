@@ -1,6 +1,5 @@
 @echo off
 setlocal EnableDelayedExpansion
-chcp 65001 >nul
 title indee - Cai dat tu dong
 
 :: ============================================================================
@@ -85,8 +84,33 @@ echo [*] He dieu hanh: Windows NT %OS_VER%, Service Pack %OS_SP%
 
 set "IS_WIN7=0"
 if "%OS_VER:~0,3%"=="6.1" set "IS_WIN7=1"
+
+:: ---- Buoc 2: .NET Framework 4.8 --------------------------------------------
+:: Kiem tra truoc khi dung toi bat cu dieu kien tien quyet nao cua Windows 7 -
+:: SP1/KB4474419/KB4490628 chi can thiet de Windows tin tuong CHU KY cua goi
+:: cai .NET Framework 4.8 chinh thuc tu Microsoft, khong phai de CHAY mot app
+:: da bien dich cho .NET 4.8. May da co san .NET 4.8 (vi du cai thu cong, hoac
+:: qua ban Windows Update khac) thi khong can va khong nen bi chan boi cac
+:: kiem tra danh cho buoc tai/cai o duoi.
+:check_net48
+echo.
+echo [*] Kiem tra .NET Framework 4.8...
+set "NET48_OK=0"
+set "RELHEX="
+for /f "tokens=3" %%A in ('reg query "HKLM\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full" /v Release 2^>nul') do set "RELHEX=%%A"
+if defined RELHEX (
+    set /a RELDEC=!RELHEX!
+    if !RELDEC! GEQ 528040 set "NET48_OK=1"
+)
+
+if "%NET48_OK%"=="1" (
+    echo [OK] Da co .NET Framework 4.8 hoac moi hon.
+    goto :install_font
+)
+
+echo [*] Chua co .NET Framework 4.8 tren may nay.
 if "%IS_WIN7%"=="1" goto :check_win7_prereqs
-goto :check_net48
+goto :do_net48_install
 
 :check_win7_prereqs
 if %OS_SP% GEQ 1 goto :check_win7_kb
@@ -113,7 +137,7 @@ if errorlevel 1 set "MISSING_KB=!MISSING_KB! KB4490628"
 
 if not defined MISSING_KB (
     echo [OK] Da co du 2 ban va SHA-2.
-    goto :check_net48
+    goto :do_net48_install
 )
 
 echo.
@@ -128,24 +152,8 @@ start "" "https://www.catalog.update.microsoft.com/Search.aspx?q=KB4490628"
 pause
 exit /b 1
 
-:: ---- Buoc 2: .NET Framework 4.8 --------------------------------------------
-:check_net48
-echo.
-echo [*] Kiem tra .NET Framework 4.8...
-set "NET48_OK=0"
-set "RELHEX="
-for /f "tokens=3" %%A in ('reg query "HKLM\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full" /v Release 2^>nul') do set "RELHEX=%%A"
-if defined RELHEX (
-    set /a RELDEC=!RELHEX!
-    if !RELDEC! GEQ 528040 set "NET48_OK=1"
-)
-
-if "%NET48_OK%"=="1" (
-    echo [OK] Da co .NET Framework 4.8 hoac moi hon.
-    goto :install_font
-)
-
-echo [*] Chua co .NET Framework 4.8 - dang tai bo cai chinh thuc tu Microsoft...
+:do_net48_install
+echo [*] Dang tai bo cai chinh thuc tu Microsoft...
 set "NET48_EXE=%TEMP_DIR%\ndp48-x86-x64-allos-enu.exe"
 powershell -NoProfile -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; [Net.WebRequest]::DefaultWebProxy = $null; try { $wc = New-Object Net.WebClient; $wc.Proxy = $null; $wc.DownloadFile('%NET48_FWLINK%', '%NET48_EXE%') } catch { Write-Host $_.Exception.Message; exit 1 }"
 if errorlevel 1 (
