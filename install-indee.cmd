@@ -4,7 +4,7 @@ chcp 65001 >nul
 title indee - Cai dat tu dong
 
 :: ============================================================================
-:: install.cmd - Bo cai dat tu dong cho ung dung indee
+:: install-indee.cmd - Bo cai dat tu dong cho ung dung indee
 :: ============================================================================
 :: Tu dong, han che thao tac cua nguoi dung toi da:
 ::   1. Tu nang quyen quan tri (UAC) neu chua chay voi quyen Administrator.
@@ -15,7 +15,7 @@ title indee - Cai dat tu dong
 ::      tai 2 muc nay (Microsoft chi phat hanh qua Update Catalog, can phien
 ::      lam viec trinh duyet, khong co link tinh de tai thang) - script se mo
 ::      san trang tim kiem tren Update Catalog va dung lai, nguoi dung cai
-::      xong thi chay lai chinh file install.cmd nay de tiep tuc (cac buoc da
+::      xong thi chay lai chinh file install-indee.cmd nay de tiep tuc (cac buoc da
 ::      xong se tu dong duoc bo qua).
 ::   3. Kiem tra & cai am tham .NET Framework 4.8 (bo cai offline chinh thuc
 ::      cua Microsoft, /q /norestart - khong hien dialog nao).
@@ -76,7 +76,7 @@ echo [!] May nay la Windows 7 nhung chua co Service Pack 1 SP1.
 echo     .NET Framework 4.8 khong the cai neu thieu SP1, va Microsoft
 echo     khong con phat hanh link tai tinh cho SP1 nen khong the tu dong
 echo     tai o day. Dang mo trang Microsoft Update Catalog de cai thu cong.
-echo     Sau khi cai xong SP1 va KHOI DONG LAI may, chay lai file install.cmd
+echo     Sau khi cai xong SP1 va KHOI DONG LAI may, chay lai file install-indee.cmd
 echo     nay de tiep tuc cac buoc con lai.
 echo.
 start "" "https://www.catalog.update.microsoft.com/Search.aspx?q=KB976932"
@@ -101,7 +101,7 @@ echo [!] May nay dang thieu ban va:!MISSING_KB!
 echo     Cac ban va nay bat buoc de Windows tin tuong goi cai .NET Framework
 echo     4.8 ky bang chu ky SHA-2. Dang mo Microsoft Update Catalog de tai/
 echo     cai thu cong - khong the tu dong hoa vi trang nay can thao tac
-echo     trinh duyet. Cai xong thi chay lai install.cmd nay de tiep tuc.
+echo     trinh duyet. Cai xong thi chay lai install-indee.cmd nay de tiep tuc.
 echo.
 start "" "https://www.catalog.update.microsoft.com/Search.aspx?q=KB4474419"
 start "" "https://www.catalog.update.microsoft.com/Search.aspx?q=KB4490628"
@@ -129,7 +129,7 @@ echo [*] Chua co .NET Framework 4.8 - dang tai bo cai chinh thuc tu Microsoft...
 set "NET48_EXE=%TEMP_DIR%\ndp48-x86-x64-allos-enu.exe"
 powershell -NoProfile -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; [Net.WebRequest]::DefaultWebProxy = $null; try { $wc = New-Object Net.WebClient; $wc.Proxy = $null; $wc.DownloadFile('%NET48_FWLINK%', '%NET48_EXE%') } catch { Write-Host $_.Exception.Message; exit 1 }"
 if errorlevel 1 (
-    echo [LOI] Khong tai duoc bo cai .NET Framework 4.8. Kiem tra ket noi mang roi chay lai install.cmd.
+    echo [LOI] Khong tai duoc bo cai .NET Framework 4.8. Kiem tra ket noi mang roi chay lai install-indee.cmd.
     pause
     exit /b 1
 )
@@ -180,7 +180,7 @@ for /f "usebackq delims=" %%A in (`powershell -NoProfile -EncodedCommand "WwBOAG
 echo %APP_EXTRACT% | findstr /B "ERROR:" >nul
 if not errorlevel 1 (
     echo [LOI] %APP_EXTRACT%
-    echo       Kiem tra ket noi mang roi chay lai install.cmd.
+    echo       Kiem tra ket noi mang roi chay lai install-indee.cmd.
     pause
     exit /b 1
 )
