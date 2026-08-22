@@ -1,12 +1,12 @@
-# indee
+# inMate
 
-**Indee** - phần mềm quản lý tiệm photocopy / in ấn (desktop, Windows).
+**inMate** - phần mềm quản lý tiệm photocopy / in ấn (desktop, Windows).
 
 ## Cài đặt
 
-1. Vào tab **[Releases](../../releases)**, tải file `indee-<phiên bản>.zip` mới nhất.
+1. Vào tab **[Releases](../../releases)**, tải file `inmate-<phiên bản>.zip` mới nhất.
 2. Giải nén ra một thư mục bất kỳ.
-3. Chạy `indee.exe`.
+3. Chạy `inmate.exe`.
 
 App tự kiểm tra bản mới mỗi lần mở và tự cập nhật khi có xác nhận - không cần tải lại thủ công sau lần cài đầu tiên.
 
@@ -17,7 +17,7 @@ App tự kiểm tra bản mới mỗi lần mở và tự cập nhật khi có x
 
 ## Cài đặt trên Windows 7
 
-Windows 7 vẫn chạy được `indee.exe`, nhưng cần đúng bản vá trước khi cài .NET Framework 4.8 - nếu bỏ qua các bước dưới đây, trình cài .NET 4.8 (hoặc Windows Update) thường báo lỗi "không hỗ trợ"/không xác thực được, dù .NET 4.8 vẫn hỗ trợ chính thức Windows 7 SP1.
+Windows 7 vẫn chạy được `inmate.exe`, nhưng cần đúng bản vá trước khi cài .NET Framework 4.8 - nếu bỏ qua các bước dưới đây, trình cài .NET 4.8 (hoặc Windows Update) thường báo lỗi "không hỗ trợ"/không xác thực được, dù .NET 4.8 vẫn hỗ trợ chính thức Windows 7 SP1.
 
 1. **Cài Windows 7 Service Pack 1 (SP1)**, nếu máy chưa có - kiểm tra tại
    *This PC → Properties*. Chưa có SP1 thì cài qua Windows Update hoặc gói cài
@@ -32,7 +32,7 @@ Windows 7 vẫn chạy được `indee.exe`, nhưng cần đúng bản vá trư�
    từ trang tải chính thức của Microsoft: https://dotnet.microsoft.com/download/dotnet-framework/net48
    - bộ cài độc lập này thường cài được ngay cả khi Windows Update trên máy
    đang gặp trục trặc.
-4. Khởi động lại máy, sau đó chạy `indee.exe` như bình thường.
+4. Khởi động lại máy, sau đó chạy `inmate.exe` như bình thường.
 
 Không cần cài lại Windows ở bất kỳ bước nào - toàn bộ chỉ là cập nhật/patch trên hệ điều hành hiện có.
 
